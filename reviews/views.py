@@ -39,6 +39,9 @@ def post_list(request):
     }
     return render(request, "reviews/post_list.html", context)
 
+def profile_view(request):
+    return render(request, 'reviews/before_logged_on.html')
+
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
