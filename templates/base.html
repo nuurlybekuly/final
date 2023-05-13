@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="{% static 'main.css' %}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville|Source+Sans+Pro&display=swap">
   </head>
+  {% block styles %}
+  {% endblock %}
   <body>
         <nav id="total_nav" class="navbar navbar-expand-sm navbar-dark bg-info sticky-top">
           <a class="navbar-brand" href="/">{% block brand %}<img src="{% static 'logoliked.png' %}">{% endblock %}</a>
@@ -33,7 +35,7 @@
                 <a class="nav-link" href="/posts/">Settings <span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/logout">Logout</a>
+                {% block button %}<a class="nav-link" href="/logout">Login</a>{% endblock %}
               </li>
             </ul>
             </div>
