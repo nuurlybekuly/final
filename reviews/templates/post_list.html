@@ -1,0 +1,23 @@
+<ul>
+  {% for post in posts_read %}
+  <br>
+      <h3>post Details</h3>
+      <hr>
+      {% if post.cover %}
+            <img src="{{ post.cover.url }}">
+            <br>
+      {% endif %}
+      <span class="text-info">Title: </span> <span>{{ post.title }}</span>
+      <br>
+      <span class="text-info">Publisher: </span><span>{{ post.creator.user.username }}</span>
+      <br>
+      <span class="text-info">Publication Date: </span><span>{{ post.publication_date }}</span>
+      <br>
+      {% if post.sample %}
+            <span class="text-info">Sample: </span><span><a href="{{ post.sample.url }}">Download</a></span>
+            <br>
+      {% endif %}
+      <br>
+      <hr>
+  {% endfor %}
+</ul>

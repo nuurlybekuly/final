@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% load profile_tags %}
+
+{% load static %}
+
+{% block title %}Profile{% endblock %}
+
+{% block heading %}Profile{% endblock %}
+
+{% block content %}
+
+<style>
+.infocell {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.infocell p {
+  margin: 5px 0;
+}
+</style>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="infocell">
+        <h3>Profile</h3>
+        {% if user.customuser.profile_image.url is not None %}
+         <p><img style="width:250px;height:250px;" src="{{ user.customuser.profile_image.url }}"></p>
+        {% else %}
+         <p><img style="width:250px;height:250px;" src="{% static 'default_avatar.jpg' %}"></p>
+
+        {% endif %}
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+        <p><strong>Date Joined:</strong> {{ user.date_joined }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Last Login:</strong> {{ user.last_login }}</p>
+      </div>
+    </div>
+  </div>
+  {% post_list user.username %}
+</div>
+{% endblock %}
