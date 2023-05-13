@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block button %}
+<a class="nav-link" href="/logout">Logout</a>
+{% endblock %}
+{% block content %}
+    <h1>User Information</h1>
+    <h2>{{ user.username }}</h2>
+    <img src="{{ user.customuser.profile_image.url }}" alt="Profile Image">
+
+    <h3>Posts:</h3>
+    <ul>
+        {% for post in user.customuser.post_set.all %}
+            <li>
+                <h4>{{ post.title }}</h4>
+                <p>{{ post.text }}</p>
+                <p>Publication Date: {{ post.publication_date }}</p>
+                <p>ISBN: {{ post.isbn }}</p>
+                <p>Number of Likes: {{ post.numOfLikes }}</p>
+                <p>Creator: {{ post.creator }}</p>
+                <img src="{{ post.cover.url }}" alt="Post Cover">
+                <a href="{{ post.sample.url }}">Download Sample</a>
+
+                <p>Tags:</p>
+                <ul>
+                    {% for tag in post.tags.all %}
+                        <li>{{ tag.name }}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h3>Comments:</h3>
+    <ul>
+        {% for comment in user.comment_set.all %}
+            <li>
+                <p>{{ comment.content }}</p>
+                <p>Created: {{ comment.date_created }}</p>
+                <p>Last Edited: {{ comment.date_edited }}</p>
+                <p>Creator: {{ comment.creator }}</p>
+                <p>Post: {{ comment.post }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

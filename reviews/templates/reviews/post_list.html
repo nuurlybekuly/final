@@ -1,5 +1,7 @@
 {% extends 'reviews/base.html' %}
-
+{% block button %}
+<a class="nav-link" href="/logout">Logout</a>
+{% endblock %}
 {% block content %}
 <ul class="list-group">
   {% for item in post_list %}
