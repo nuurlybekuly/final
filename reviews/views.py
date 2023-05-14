@@ -8,7 +8,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
 from .forms import SearchForm, CommentForm, PostMediaForm
-from .models import Post, Comment
+
+from .models import Post, Comment, Tag, CustomUser
 from .utils import average_rating
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
@@ -59,14 +60,19 @@ def signup_success(request):
 
 def create_post(request):
     if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES)
+        form = PostMediaForm(request.POST, request.FILES)
         if form.is_valid():
-            post = form.save()
-            return redirect('profile')  # Redirect to the profile page after successful post creation
+            post = form.save(commit=False)
+            post.numOfLikes = 0
+            post.creator = request.user.customuser if hasattr(request.user, 'customuser') else None
+            post.publication_date = timezone.now().date()  # Set the publication date to the current date and time
+            post.save()
+            form.save_m2m()
+            return redirect('profile')
     else:
-        form = PostForm()
+        form = PostMediaForm()
 
-    return render(request, 'addposts.html', {'form': form})
+    return render(request, 'reviews/add_posts.html', {'form': form, 'users': CustomUser.objects.all(), 'tags': Tag.objects.all()})
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
