@@ -17,10 +17,46 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville|Source+Sans+Pro&display=swap">
   </head>
   {% block styles %}
+  <style>
+    body {
+      background-image: url('https://wallpapercave.com/wp/wp7632666.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Content Styles */
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 48px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-align: center;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    p {
+      color: #fff;
+      font-size: 24px;
+      text-align: center;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+</style>
   {% endblock %}
   <body>
         <nav id="total_nav" class="navbar navbar-expand-sm navbar-dark bg-info sticky-top">
-          <a class="navbar-brand" href="/">{% block brand %}<img src="{% static 'logoliked.png' %}">{% endblock %}</a>
+          <a class="navbar-brand" href="{% url 'welcome' %}">{% block brand %}<img src="{% static 'logoliked.png' %}">{% endblock %}</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -61,7 +97,23 @@
           </div>
         {% endfor %}
         {% block content %}
-            <h1>Welcome to liked!</h1>
+            <div class="container">
+    <h1>Welcome to Liked</h1>
+    <p>Discover, share, and connect with what you like.</p>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+  </div>
         {% endblock %}
         </div>
   <!-- Copyright -->
@@ -74,6 +126,8 @@
   </footer>
   <!-- Copyright -->
   <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
   {% block scripts %}
   {% endblock %}
   </body>
