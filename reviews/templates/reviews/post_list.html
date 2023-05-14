@@ -2,24 +2,55 @@
 {% block button %}
 <a class="nav-link" href="/logout">Logout</a>
 {% endblock %}
-{% block content %}
-<ul class="list-group">
-  {% for item in post_list %}
-  <li class="list-group-item">
-      <span class="text-info">Title: </span> <span>{{ item.post.title }}</span>
-      <br>
-      <span class="text-info">Publisher: </span><span>{{ item.post.publisher }}</span>
-      <br>
-      <span class="text-info">Publication Date: </span><span>{{ item.post.publication_date }}</span>
-      <br>
-      <span class="text-info">Number of comments: </span><span>{{ item.number_of_comments }}</span>
-      <br>
-      {% if not item.number_of_comments %}
-      <span class="text-secondary">Provide a rating and write the first review for this post.</span>
-      <br>
-      {% endif %}
-      <a class="btn btn-primary btn-sm active" role="button" href="{% url 'post_detail' item.post.pk %}">Comments</a></li>
-  </li>
-  {% endfor %}
-</ul>
+{% block styles %}
+<style>
+.card-img-top {
+  width: 100%;
+  height: 200px; /* Adjust the height as needed */
+  object-fit: cover;
+}
+.row {
+  padding-top: 25px;
+}
+</style>
 {% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    {% for item in post_list %}
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <img src="{{ item.post.cover.url }}" class="card-img-top" alt="Post Image">
+        <div class="card-body">
+          <h5 class="card-title">{{ item.post.title }}</h5>
+          <p class="card-text">{{ item.post.publisher }}</p>
+          <p class="card-text">{{ item.post.publication_date }}</p>
+          <p class="card-text">{{ item.number_of_comments }} Comments</p>
+          <p class="card-text">Likes: <span id="likes-{{ item.post.pk }}">{{ item.post.numOfLikes }}</span></p>
+          <a href="{% url 'post_detail' item.post.pk %}" class="btn btn-primary">Comments</a>
+          <button class="btn btn-secondary like-btn" data-post-id="{{ item.post.pk }}">Like</button>
+        </div>
+      </div>
+    </div>
+    {% if forloop.counter|divisibleby:3 %}
+    </div>
+    <div class="row">
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.querySelectorAll('.like-btn').forEach(function(button) {
+    button.addEventListener('click', function() {
+      var postId = this.getAttribute('data-post-id');
+      var likesElement = document.querySelector('#likes-' + postId);
+      var currentLikes = parseInt(likesElement.innerText);
+      likesElement.innerText = currentLikes + 1;
+    });
+  });
+</script>
+{% endblock %}
+

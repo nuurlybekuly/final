@@ -7,12 +7,14 @@ from django.core.files.images import ImageFile
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
-from .forms import SearchForm, CommentForm, PostMediaForm
+from .forms import SearchForm, CommentForm, PostMediaForm, SettingsForm, PostForm
 
 from .models import Post, Comment, Tag, CustomUser
 from .utils import average_rating
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth import get_user_model
+
 
 def get_user_by_username(username):
     try:
@@ -23,6 +25,20 @@ def get_user_by_username(username):
 
 def index(request):
     return render(request, "base.html")
+
+def settings_view(request):
+    form = SettingsForm()
+
+    if request.method == 'POST':
+        form = SettingsForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Process form data and update user's information
+            # Example: Update the user's username
+            request.user.username = form.cleaned_data['username']
+            request.user.save()
+            return redirect('settings')
+
+    return render(request, 'reviews/settings.html', {'form': form})
 
 def post_list(request):
     posts = Post.objects.all()
@@ -46,13 +62,21 @@ def profile_view(request):
     else:
         return render(request, 'reviews/before_logged_on.html')
 
+
 def signing(request):
     if request.method == 'POST':
         username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
-        User.objects.create_superuser(username=username, email=email, password=password)
-        return redirect('signup_success')  # Redirect to a success page after creating the superuser
+
+        # Create the superuser
+        User = get_user_model()
+        user = User.objects.create_superuser(username=username, email=email, password=password)
+
+        # Create the associated CustomUser
+        custom_user = CustomUser.objects.create(user=user)
+
+        return redirect('signup_success')  # Redirect to a success page after creating the superuser and CustomUser
     return render(request, 'reviews/signup.html')
 
 def signup_success(request):
@@ -60,17 +84,22 @@ def signup_success(request):
 
 def create_post(request):
     if request.method == 'POST':
-        form = PostMediaForm(request.POST, request.FILES)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
-            post.creator = request.user.customuser  # Assign the current user as the post creator
-            post.publication_date = timezone.now()  # Set the publication date to the current local time
+            post.creator = request.user  # Assign the User instance to the creator field
+            post.publication_date = timezone.now()
             post.numOfLikes = 0
+
+            # Automatically set the publisher as the superuser
+            if request.user.is_superuser:
+                post.publisher = CustomUser.objects.get(user=request.user)
+
             post.save()
-            form.save_m2m()  # Save many-to-many fields
-            return redirect('reviews/after_log_profile.html')  # Replace 'profile' with the actual URL name for the user's profile page
+            form.save_m2m()
+            return redirect('profile')
     else:
-        form = PostMediaForm()
+        form = PostForm()
 
     return render(request, 'reviews/add_posts.html', {'form': form})
 def post_detail(request, pk):

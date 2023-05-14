@@ -3,14 +3,16 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.conf import settings
+
 
 class CustomUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
+    profile_image = models.ImageField(upload_to='profile_photos', default='static/default_avatar.jpg')
 
     # Add any additional fields or methods as needed
 
-    def __str__(self):
+    def str(self):
         return self.user.username
 
 class Tag(models.Model):
@@ -26,11 +28,15 @@ class Post(models.Model):
                              help_text="The title of the post.")
     text=models.TextField()
     publication_date = models.DateField(
-        verbose_name="Date the post was published.")
+        verbose_name="Date the post was published.",
+        null=True,
+        blank=True
+    )
+
     isbn = models.CharField(max_length=20,
                             verbose_name="ISBN number of the post.")
     numOfLikes=models.IntegerField()
-    creator = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
     cover = models.ImageField(null=True,
                               blank=True,
                               upload_to="post_covers/")
