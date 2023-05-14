@@ -57,7 +57,16 @@ def signing(request):
 def signup_success(request):
     return render(request, 'reviews/signup_succes.html')
 
+def create_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save()
+            return redirect('profile')  # Redirect to the profile page after successful post creation
+    else:
+        form = PostForm()
 
+    return render(request, 'addposts.html', {'form': form})
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)

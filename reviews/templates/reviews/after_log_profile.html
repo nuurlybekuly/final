@@ -1,8 +1,73 @@
 {% extends 'base.html' %}
+
 {% block button %}
 <a class="nav-link" href="/logout">Logout</a>
 {% endblock %}
+
+{% block styles %}
+<style>
+    /* Profile Page Styles */
+    .profile {
+        text-align: center;
+        padding-top: 20px;
+    }
+
+    .profile h1 {
+        font-size: 26px;
+        margin-top: 10px;
+    }
+
+    .profile h2 {
+        font-size: 18px;
+        margin-top: 5px;
+    }
+
+    .profile img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        margin-top: 20px;
+    }
+
+    .profile h3 {
+        font-size: 20px;
+        margin-top: 30px;
+    }
+
+    .profile ul {
+        list-style: none;
+        padding: 0;
+        margin-top: 10px;
+    }
+
+    .profile li {
+        margin-bottom: 20px;
+    }
+
+    .profile a.button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #5181b8;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 20px;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+
+    .profile a.button:hover {
+        background-color: #416d9f;
+    }
+
+    .profile a.button:last-child {
+        margin-right: 0;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
+<div class="profile">
     <h1>User Information</h1>
     <h2>{{ user.username }}</h2>
     <img src="{{ user.customuser.profile_image.url }}" alt="Profile Image">
@@ -30,16 +95,9 @@
         {% endfor %}
     </ul>
 
-    <h3>Comments:</h3>
-    <ul>
-        {% for comment in user.comment_set.all %}
-            <li>
-                <p>{{ comment.content }}</p>
-                <p>Created: {{ comment.date_created }}</p>
-                <p>Last Edited: {{ comment.date_edited }}</p>
-                <p>Creator: {{ comment.creator }}</p>
-                <p>Post: {{ comment.post }}</p>
-            </li>
-        {% endfor %}
-    </ul>
+    <a class="button" href="/edit-profile">Edit Profile</a>
+    <a class="button" href="/change-password">Change Password</a>
+    <a class="button" href="/create-post">Add Post</a>
+</div>
 {% endblock %}
+
