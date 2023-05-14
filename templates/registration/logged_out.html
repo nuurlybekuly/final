@@ -1,15 +1,56 @@
 {% extends "base.html" %}
 
-{% block button %}
-<a class="nav-link" href="/logout">Login</a>
+{% block styles %}
+<style>
+body {
+      background-color: #f7f7f7;
+    }
+    .login-form {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 30px;
+      background-color: #ffffff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .login-form h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: info;
+    }
+    .form-control {
+      border-radius: 3px;
+    }
+    .login-button {
+      margin-top: 15px;
+    }
+    .signup-button {
+      margin-top: 15px;
+    }
+    </style>
 {% endblock %}
 
-{% block breadcrumbs %}<div class="breadcrumbs"><a href="{% url 'admin:index' %}">Home</a></div>{% endblock %}
-
 {% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="login-form">
+          <h2 class="text-info">Login</h2>
+          <form method="post" action="{% url 'accounts:login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Username" name="username">
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control" placeholder="Password" name="password">
+            </div>
+            <button type="submit" class="btn btn-primary col-md-12 login-button">Login</button>
+          </form>
+            <a href="/posts/signing/"><button class="btn btn-secondary col-md-12 signup-button">Sign Up</button></a>
 
-<p>Thanks for spending some quality time with the Web site today.</p>
-
-<p><a href="{% url 'accounts:login' %}">Log in again</a></p>
-
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

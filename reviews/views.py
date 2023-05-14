@@ -63,17 +63,16 @@ def create_post(request):
         form = PostMediaForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
+            post.creator = request.user.customuser  # Assign the current user as the post creator
+            post.publication_date = timezone.now()  # Set the publication date to the current local time
             post.numOfLikes = 0
-            post.creator = request.user.customuser if hasattr(request.user, 'customuser') else None
-            post.publication_date = timezone.now().date()  # Set the publication date to the current date and time
             post.save()
-            form.save_m2m()
-            return redirect('profile')
+            form.save_m2m()  # Save many-to-many fields
+            return redirect('reviews/after_log_profile.html')  # Replace 'profile' with the actual URL name for the user's profile page
     else:
         form = PostMediaForm()
 
-    return render(request, 'reviews/add_posts.html', {'form': form, 'users': CustomUser.objects.all(), 'tags': Tag.objects.all()})
-
+    return render(request, 'reviews/add_posts.html', {'form': form})
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     comments = post.comment_set.all()
