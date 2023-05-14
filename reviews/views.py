@@ -45,6 +45,19 @@ def profile_view(request):
     else:
         return render(request, 'reviews/before_logged_on.html')
 
+def signing(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        User.objects.create_superuser(username=username, email=email, password=password)
+        return redirect('signup_success')  # Redirect to a success page after creating the superuser
+    return render(request, 'reviews/signup.html')
+
+def signup_success(request):
+    return render(request, 'reviews/signup_succes.html')
+
+
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)

@@ -3,6 +3,8 @@ from . import views
 
 urlpatterns = [
     path('', views.post_list, name='post_list'),
+    path('posts/signing/', views.signing, name='signing'),
+    path('signup/success/', views.signup_success, name='signup_success'),
     path('accounts/profile/', views.profile_view),
     path('posts/', views.post_list, name='post_list'),
     path('posts/profile_bef/', views.profile_view, name='profile'),
