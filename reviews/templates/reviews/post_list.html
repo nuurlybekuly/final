@@ -22,8 +22,10 @@
       <div class="card mb-4">
         <img src="{{ item.post.cover.url }}" class="card-img-top" alt="Post Image">
         <div class="card-body">
-          <h5 class="card-title">{{ item.post.title }}</h5>
-          <p class="card-text">{{ item.post.publisher }}</p>
+          <h5 class="card-title">Title: {{ item.post.title }}</h5>
+          {% if is_superuser %}
+          <p class="card-text">Publisher: {{ item.post.creator.username }}</p>  <!-- Display the post creator username as the publisher -->
+          {% endif %}
           <p class="card-text">{{ item.post.publication_date }}</p>
           <p class="card-text">{{ item.number_of_comments }} Comments</p>
           <p class="card-text">Likes: <span id="likes-{{ item.post.pk }}">{{ item.post.numOfLikes }}</span></p>
@@ -40,17 +42,3 @@
   </div>
 </div>
 {% endblock %}
-
-{% block scripts %}
-<script>
-  document.querySelectorAll('.like-btn').forEach(function(button) {
-    button.addEventListener('click', function() {
-      var postId = this.getAttribute('data-post-id');
-      var likesElement = document.querySelector('#likes-' + postId);
-      var currentLikes = parseInt(likesElement.innerText);
-      likesElement.innerText = currentLikes + 1;
-    });
-  });
-</script>
-{% endblock %}
-

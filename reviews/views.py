@@ -26,6 +26,9 @@ def get_user_by_username(username):
 def index(request):
     return render(request, "base.html")
 
+def welcome(request):
+    return render(request, 'reviews/welcome.html')
+
 def settings_view(request):
     form = SettingsForm()
 
@@ -52,9 +55,11 @@ def post_list(request):
         posts_with_comments.append({"post": post, "number_of_comments": number_of_comments})
 
     context = {
-        "post_list": posts_with_comments
+        "post_list": posts_with_comments,
+        "is_superuser": request.user.is_superuser  # Add this line to pass the is_superuser flag to the template
     }
     return render(request, "reviews/post_list.html", context)
+
 
 def profile_view(request):
     if request.user.is_authenticated:
@@ -82,18 +87,22 @@ def signing(request):
 def signup_success(request):
     return render(request, 'reviews/signup_succes.html')
 
+User = get_user_model()
+
 def create_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
-            post.creator = request.user  # Assign the User instance to the creator field
             post.publication_date = timezone.now()
             post.numOfLikes = 0
 
+            # Automatically set the creator as the current user
+            post.creator = request.user
+
             # Automatically set the publisher as the superuser
             if request.user.is_superuser:
-                post.publisher = CustomUser.objects.get(user=request.user)
+                post.publisher = request.user
 
             post.save()
             form.save_m2m()
@@ -102,6 +111,7 @@ def create_post(request):
         form = PostForm()
 
     return render(request, 'reviews/add_posts.html', {'form': form})
+
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     comments = post.comment_set.all()
