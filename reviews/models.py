@@ -27,6 +27,17 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+class Comment(models.Model):
+    content = models.TextField(help_text="")
+    date_created = models.DateTimeField(auto_now_add=True,
+                                        help_text="The date and time the review was created.")
+    creator = models.ForeignKey(auth.get_user_model(), on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE,
+                             help_text="The post that this review is for.")
+    def __str__(self):
+        return "{} - {}".format(self.creator.username, self.post.title)
+
+
 
 class Post(models.Model):
     """A published post."""
@@ -38,7 +49,6 @@ class Post(models.Model):
         null=True,
         blank=True
     )
-
     isbn = models.CharField(max_length=20,
                             verbose_name="ISBN number of the post.")
     numOfLikes=models.IntegerField()
@@ -52,19 +62,8 @@ class Post(models.Model):
     tags=models.ManyToManyField(Tag)
     def __str__(self):
         return "{} ({})".format(self.title, self.isbn)
-
     def isbn13(self):
         """ '9780316769174' => '978-0-31-676917-4' """
         return "{}-{}-{}-{}-{}".format(self.isbn[0:3], self.isbn[3:4],
                                        self.isbn[4:6], self.isbn[6:12],
                                        self.isbn[12:13])
-
-class Comment(models.Model):
-    content = models.TextField(help_text="")
-    date_created = models.DateTimeField(auto_now_add=True,
-                                        help_text="The date and time the review was created.")
-    creator = models.ForeignKey(auth.get_user_model(), on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE,
-                             help_text="The post that this review is for.")
-    def __str__(self):
-        return "{} - {}".format(self.creator.username, self.post.title)

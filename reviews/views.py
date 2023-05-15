@@ -86,23 +86,16 @@ def post_list(request):
         "is_superuser": request.user.is_superuser  # Add this line to pass the is_superuser flag to the template
     }
     return render(request, "reviews/post_list.html", context)
-
-
-
-
-
 def profile_view(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
             posts = Post.objects.filter(creator=request.user)
         else:
             posts = request.user.customuser.post_set.all()
-
         context = {
             'user': request.user,
             'posts': posts,
         }
-
         return render(request, 'reviews/after_log_profile.html', context)
     else:
         return render(request, 'reviews/before_logged_on.html')
