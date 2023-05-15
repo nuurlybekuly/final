@@ -61,9 +61,37 @@ def post_list(request):
     return render(request, "reviews/post_list.html", context)
 
 
+def like_post(request, post_id):
+    if request.method == 'POST':
+        post = Post.objects.get(pk=post_id)
+        user = request.user
+
+        # Check if the user has already liked the post
+        if post.likes.filter(id=user.id).exists():
+            # User has already liked the post, so remove the like
+            post.likes.remove(user)
+            messages.success(request, 'You unliked the post.')
+        else:
+            # User hasn't liked the post, so add the like
+            post.likes.add(user)
+            messages.success(request, 'You liked the post.')
+
+    return redirect('post_list')
+
+
 def profile_view(request):
+    if request.user.is_superuser:
+        posts = Post.objects.filter(creator=request.user)
+    else:
+        posts = request.user.customuser.post_set.all()
+
+    context = {
+        'user': request.user,
+        'posts': posts,
+    }
+
     if request.user.is_authenticated:
-        return render(request, 'reviews/after_log_profile.html')
+        return render(request, 'reviews/after_log_profile.html', context)
     else:
         return render(request, 'reviews/before_logged_on.html')
 

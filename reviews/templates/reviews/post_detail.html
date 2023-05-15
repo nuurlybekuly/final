@@ -1,43 +1,102 @@
 {% extends 'reviews/base.html' %}
 
+{% block styles %}
+<style>
+  .post-details-heading {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .post-details {
+    display: flex;
+    margin-top: 20px;
+  }
+
+  .post-cover-image {
+    width: 300px;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 20px;
+  }
+
+  .post-content {
+    flex-grow: 1;
+  }
+
+  .comments-heading {
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  .comments-list {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .comment-item {
+    margin-bottom: 20px;
+  }
+
+  .text-info {
+    font-weight: bold;
+  }
+
+  .edit-comment-link {
+    margin-top: 10px;
+    display: inline-block;
+    color: blue;
+  }
+
+  .add-comment-btn,
+  .post-media-btn {
+    margin-top: 20px;
+    margin-right: 10px;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
+<br>
+<h3 class="post-details-heading">Post Details</h3>
+<hr>
+<div class="post-details">
+  {% if post.cover %}
+    <img src="{{ post.cover.url }}" class="post-cover-image">
+  {% endif %}
+  <div class="post-content">
+    <span class="text-info">Title: </span> <span>{{ post.title }}</span>
+    <br>
+    <span class="text-info">Publisher: </span><span>{{ post.creator.user.username }}</span>
+    <br>
+    <span class="text-info">Publication Date: </span><span>{{ post.publication_date }}</span>
+    <br>
+    {% if post.sample %}
+      <span class="text-info">Sample: </span><span><a href="{{ post.sample.url }}">Download</a></span>
       <br>
-      <h3>post Details</h3>
-      <hr>
-      {% if post.cover %}
-            <img src="{{ post.cover.url }}">
-            <br>
+    {% endif %}
+  </div>
+</div>
+<hr>
+<h3 class="comments-heading">Comments</h3>
+<ul class="comments-list">
+  {% for comment in comments %}
+    <li class="comment-item">
+      <span class="text-info">Comment: </span> <span>{{ comment.content }}</span>
+      <br>
+      <span class="text-info">Created on: </span><span>{{ comment.date_created }}</span>
+      <br>
+      <span class="text-info">Modified on: </span><span>{{ comment.date_edited }}</span>
+      <br>
+      <span class="text-info">Creator: </span><span>{{ comment.creator.username }}</span>
+      <br>
+      {% if comment.creator.username == user.username %}
+        <a href="{% url 'comment_edit' post.pk comment.pk %}" class="edit-comment-link">Edit comment</a>
       {% endif %}
-      <span class="text-info">Title: </span> <span>{{ post.title }}</span>
-      <br>
-      <span class="text-info">Publisher: </span><span>{{ post.creator.user.username }}</span>
-      <br>
-      <span class="text-info">Publication Date: </span><span>{{ post.publication_date }}</span>
-      <br>
-      {% if post.sample %}
-            <span class="text-info">Sample: </span><span><a href="{{ post.sample.url }}">Download</a></span>
-            <br>
-      {% endif %}
-      <br>
-      <hr>
-      <h3>Comments</h3>
-      <ul>
-      {% for comment in comments %}
-            <li class="list-group-item">
-                  <span class="text-info">comment: </span> <span>{{ comment.content }}</span>
-                  <br>
-                  <span class="text-info">Created on: </span><span>{{ comment.date_created }}</span>
-                  <br>
-                  <span class="text-info">Modified on: </span><span>{{ comment.date_edited }}</span>
-                  <br>
-                  <span class="text-info">Creator: </span><span>{{ comment.creator.username }}</span>
-                  <br>
-                  {% if comment.creator.username == user.username %}
-                        <a href="{% url 'comment_edit' post.pk comment.pk %}">Edit comment</a>
-                  {% endif %}
-            </li>
-      {% endfor %}
-      </ul>
-      <a class="btn btn-primary" href="{% url 'comment_create' post.pk %}">Add comment</a>
-      <a class="btn btn-primary" href="{% url 'post_media' post.pk %}">Media</a>
+    </li>
+  {% endfor %}
+</ul>
+<a class="btn btn-primary add-comment-btn" href="{% url 'comment_create' post.pk %}">Add Comment</a>
+<a class="btn btn-primary post-media-btn" href="{% url 'post_media' post.pk %}">Media</a>
 {% endblock %}

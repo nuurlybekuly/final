@@ -5,7 +5,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
 
-
 class CustomUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_image = models.ImageField(upload_to='profile_photos', default='static/default_avatar.jpg')

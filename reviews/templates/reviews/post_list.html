@@ -12,6 +12,10 @@
 .row {
   padding-top: 25px;
 }
+.btn-like {
+  background-color: red;
+  color: white;
+}
 </style>
 {% endblock %}
 {% block content %}
@@ -41,4 +45,29 @@
     {% endfor %}
   </div>
 </div>
+
+<script>
+// Like button click event handler
+document.addEventListener('DOMContentLoaded', function() {
+  const likeButtons = document.querySelectorAll('.like-btn');
+  likeButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+      const postId = button.dataset.postId;
+      const likesSpan = document.querySelector(`#likes-${postId}`);
+      const currentLikes = parseInt(likesSpan.innerText);
+
+      if (button.classList.contains('btn-like')) {
+        // User has already liked, so remove the like
+        button.classList.remove('btn-like');
+        likesSpan.innerText = currentLikes - 1;
+      } else {
+        // User hasn't liked yet, so add the like
+        button.classList.add('btn-like');
+        likesSpan.innerText = currentLikes + 1;
+      }
+    });
+  });
+});
+</script>
+
 {% endblock %}
