@@ -15,6 +15,32 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import get_user_model
 
+from django.http import JsonResponse
+
+
+def like_unlike_post(request):
+    if request.method == "POST":
+        post_id = request.POST.get("post_id")
+        post = Post.objects.get(id=post_id)
+        user = request.user
+        liked = False
+
+        if user.is_authenticated:
+            if user in post.likes.all():
+                post.likes.remove(user)
+                liked = False
+            else:
+                post.likes.add(user)
+                liked = True
+
+                # Create a Like instance and save it
+                like = Like(user=user, post=post)
+                like.save()
+
+        return JsonResponse({"liked": liked, "likes_count": post.likes.count()})
+    else:
+        return JsonResponse({}, status=400)
+
 
 def get_user_by_username(username):
     try:
