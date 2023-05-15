@@ -33,6 +33,9 @@ body {
 #ln{
   color: #fff;
 }
+.text-danger{
+    margin-left: 40px;
+}
 {% endblock %}
 
 {% block content %}
@@ -41,6 +44,9 @@ body {
       <div class="col-md-12">
         <div class="login-form">
           <h2 class="text-info">Login</h2>
+            {% if form.errors %}
+            <p class="text-danger">Username or Password is not correct. Please try again.</p>
+          {% endif %}
           <form method="post" action="{% url 'accounts:login' %}">
             {% csrf_token %}
             <div class="form-group">

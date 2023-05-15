@@ -19,27 +19,40 @@
 #hm{
   color: #fff;
 }
+.comments-img {
+  width: 40px; /* Adjust the size as needed */
+  height: 40px; /* Adjust the size as needed */
+  border-radius: 50%; /* Make it circular */
+}
+
 {% endblock %}
 {% block content %}
 <div class="container">
   <div class="row">
     {% for item in post_list %}
     <div class="col-md-4">
-      <div class="card mb-4">
-        <img src="{{ item.post.cover.url }}" class="card-img-top" alt="Post Image">
-        <div class="card-body">
-          <h5 class="card-title">Title: {{ item.post.title }}</h5>
-          {% if is_superuser %}
-          <p class="card-text">Publisher: {{ item.post.creator.username }}</p>  <!-- Display the post creator username as the publisher -->
-          {% endif %}
-          <p class="card-text">{{ item.post.publication_date }}</p>
-          <p class="card-text">{{ item.number_of_comments }} Comments</p>
-          <p class="card-text">Likes: <span id="likes-{{ item.post.pk }}">{{ item.post.numOfLikes }}</span></p>
-          <a href="{% url 'post_detail' item.post.pk %}" class="btn btn-primary">Comments</a>
-          <button class="btn btn-secondary like-btn" data-post-id="{{ item.post.pk }}">Like</button>
-        </div>
+  <div class="card mb-4">
+    <img src="{{ item.post.cover.url }}" class="card-img-top" alt="Post Image">
+    <div class="card-body">
+      <h5 class="card-title">Title: {{ item.post.title }}</h5>
+      {% if is_superuser %}
+      <p class="card-text">Publisher: {{ item.post.creator.username }}</p>
+      {% endif %}
+      <p class="card-text">{{ item.post.publication_date }}</p>
+      <p class="card-text">{{ item.number_of_comments }} Comments</p>
+      <p class="card-text">Likes: <span id="likes-{{ item.post.pk }}">{{ item.post.numOfLikes }}</span></p>
+      <div class="d-flex justify-content-between align-items-center">
+        <a href="{% url 'post_detail' item.post.pk %}">
+          <img src="https://w7.pngwing.com/pngs/137/991/png-transparent-blue-chat-chatting-circle-comment-message-messaging-web-ui-color-icon.png" alt="Comments" class="comments-img">
+        </a>
+        <button class="btn btn-secondary like-btn" data-post-id="{{ item.post.pk }}">Like</button>
       </div>
     </div>
+  </div>
+</div>
+
+
+
     {% if forloop.counter|divisibleby:3 %}
     </div>
     <div class="row">

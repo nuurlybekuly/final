@@ -117,7 +117,14 @@ def signing(request):
 
         # Create the superuser
         User = get_user_model()
+
+        if User.objects.filter(username=username).exists():
+            error_message = 'Such username exists, write another one'
+            return render(request, 'reviews/signup.html', {'error_message': error_message})
+
         user = User.objects.create_superuser(username=username, email=email, password=password)
+
+
 
         # Create the associated CustomUser
         custom_user = CustomUser.objects.create(user=user)
