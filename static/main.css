@@ -1,58 +1,12 @@
-textarea{
-  /* Add your desired styles here */
-  border: 55px solid #ccc;
-  padding: 5px;
-  font-size: 14px;
-  /* Additional styles... */
-}
+.nav-link {
+        position: relative;
+        transition: font-size 0.2s ease-in-out;
+    }
 
-#total_nav {
-  height: 50%;
-  background-color: green;
-}
+    .nav-link:hover {
+        font-size: 1.1em;
+    }
 
-.navbar {
-    min-height: 100px;
-    font-size: 25px;
-}
-
-.navbar-brand {
-    font-size: 30px;
-}
-
-.navbar-brand > img {
-    margin-left: 50px;
-    height: 60px;
-}
-
-body {
-   font-family: 'Source Sans Pro', sans-serif;
-   background-color: white;
-   color: brown;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Libre Baskerville', serif;
-}
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-       }
-
-        .profile {
-            background-color: #ffffff;
-            padding: 20px;
-            border: 1px solid #cccccc;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            font-size: 24px;
-            color: #333333;
-            margin-top: 0;
-        }
-        p {
-            margin-bottom: 10px;
-        }
-
+    .nav-link:active {
+        text-decoration: underline;
+    }
