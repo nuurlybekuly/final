@@ -63,8 +63,6 @@ class Comment(models.Model):
     content = models.TextField(help_text="")
     date_created = models.DateTimeField(auto_now_add=True,
                                         help_text="The date and time the review was created.")
-    date_edited = models.DateTimeField(null=True,
-                                       help_text="The date and time the review was last edited.")
     creator = models.ForeignKey(auth.get_user_model(), on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE,
                              help_text="The post that this review is for.")

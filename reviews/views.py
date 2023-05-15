@@ -14,6 +14,7 @@ from .utils import average_rating
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 
 from django.http import JsonResponse
 
@@ -160,6 +161,7 @@ def create_post(request):
 
     return render(request, 'reviews/add_posts.html', {'form': form})
 
+@login_required
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     comments = post.comment_set.all()
@@ -173,6 +175,7 @@ def post_detail(request, pk):
             "post": post,
             "comments": None
         }
+
     if request.user.is_authenticated:
         max_viewed_posts_length = 10
         viewed_posts = request.session.get('viewed_posts', [])
@@ -182,6 +185,15 @@ def post_detail(request, pk):
         viewed_posts.insert(0, viewed_post)
         viewed_posts = viewed_posts[:max_viewed_posts_length]
         request.session['viewed_posts'] = viewed_posts
+
+    if request.method == 'POST':
+        post = get_object_or_404(Post, pk=pk)
+        content = request.POST['content']
+        creator = request.user  # Assign the authenticated user as the comment creator
+        comment = Comment.objects.create(content=content, creator=creator, post=post)
+
+        return redirect('post_detail', pk=pk)
+
     return render(request, "reviews/post_detail.html", context)
 
 
