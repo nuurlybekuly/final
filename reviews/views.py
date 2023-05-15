@@ -161,6 +161,17 @@ def create_post(request):
 
     return render(request, 'reviews/add_posts.html', {'form': form})
 
+
+def delete_post(request, title):
+    post = get_object_or_404(Post, title=title)
+
+    if post.creator == request.user:
+        post.delete()
+        return redirect('profile')
+    else:
+        return render(request, 'reviews/after_log_profile.html')
+
+
 @login_required
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)

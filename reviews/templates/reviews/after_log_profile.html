@@ -87,6 +87,10 @@
         background-color: #416d9f;
     }
 
+    #del{
+        background-color: red;
+    }
+
 {% endblock %}
 
 {% block content %}
@@ -94,9 +98,9 @@
     <h1>User Information</h1>
     <h2>{{ user.username }}</h2>
     {% if user.customuser.profile_image %}
-    <img src="{{ user.customuser.profile_image.url }}" alt="Profile Image">
+        <img src="{{ user.customuser.profile_image.url }}" alt="Profile Image">
     {% else %}
-    <img src="{% static 'default_avatar.jpg' %}" alt="Default Avatar">
+        <img src="{% static 'default_avatar.jpg' %}" alt="Default Avatar">
     {% endif %}
 
     <h3>Posts:</h3>
@@ -105,20 +109,17 @@
         <div class="post">
             <h4>Title: {{ post.title }}</h4>
             <p>Publication Date: {{ post.publication_date }}</p>
-            <p>ISBN: {{ post.isbn }}</p>
             <p>Number of Likes: {{ post.numOfLikes }}</p>
             <p>Creator: {{ post.creator }}</p>
             {% if post.cover %}
             <img src="{{ post.cover.url }}" alt="Post Cover">
             {% endif %}
+            <a id="del" class="del" href="/delete-post/{{ post.title }}">Delete</a>
+
             {% if post.sample %}
                 <a href="{{ post.sample.url }}">Download Sample</a>
             {%endif %}
-<p>Tags:</p>
-<ul>
-{% for tag in post.tags.all %}
-<li>{{ tag.name }}</li>
-{% endfor %}
+
 </ul>
 </div>
 {% endfor %}
